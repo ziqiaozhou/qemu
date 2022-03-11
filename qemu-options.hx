@@ -3744,6 +3744,14 @@ SRST
     Limitation: covers only syntactic aspects of QMP.
 ERST
 
+DEF("mmio-fw_cfg", 0, QEMU_OPTION_mmio_fwcfg,
+    "-mmio-fw_cfg\n"
+    "                Use MMIO fw_cfg instead of port IO based.\n"
+    "                This option needs a supported bios.\n",
+    QEMU_ARCH_I386)
+SRST
+ERST
+
 DEF("fw_cfg", HAS_ARG, QEMU_OPTION_fwcfg,
     "-fw_cfg [name=]<name>,file=<file>\n"
     "                add named fw_cfg entry with contents from file\n"

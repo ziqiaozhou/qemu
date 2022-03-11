@@ -355,6 +355,7 @@ struct MachineState {
     char *kernel_filename;
     char *kernel_cmdline;
     char *initrd_filename;
+    bool use_mmio_fwcfg;
     const char *cpu_type;
     AccelState *accelerator;
     CPUArchIdList *possible_cpus;

@@ -13,6 +13,7 @@
 #include "hw/nvram/fw_cfg.h"
 
 #define FW_CFG_IO_BASE     0x510
+#define FW_CFG_MMIO_BASE   0xfed50000
 
 #define FW_CFG_ACPI_TABLES      (FW_CFG_ARCH_LOCAL + 0)
 #define FW_CFG_SMBIOS_ENTRIES   (FW_CFG_ARCH_LOCAL + 1)

@@ -57,6 +57,7 @@
 #define FW_CFG_DMA_CTL_WRITE   0x10
 
 #define FW_CFG_DMA_SIGNATURE 0x51454d5520434647ULL /* "QEMU CFG" */
+#define X86_MMIO_CFG 1
 
 struct FWCfgEntry {
     uint32_t len;
@@ -463,6 +464,26 @@ static void fw_cfg_dma_mem_write(void *opaque, hwaddr addr,
 {
     FWCfgState *s = opaque;
 
+    if (size == 2) {
+        if (addr == 0) {
+            /* FWCfgDmaAccess low address */
+            s->dma_addr |= (value << 48);
+            trace_fw_cfg_select(s, addr, "dma", s->dma_addr);
+        }else if (addr == 2) {
+            /* FWCfgDmaAccess low address */
+            s->dma_addr |= (value << 32);
+            trace_fw_cfg_select(s, addr, "dma", s->dma_addr);
+        }else if (addr == 4) {
+            /* FWCfgDmaAccess low address */
+            s->dma_addr |= (value << 16);
+            trace_fw_cfg_select(s, addr, "dma", s->dma_addr);
+        }else if (addr == 6) {
+            /* FWCfgDmaAccess low address */
+            s->dma_addr |= value;
+            trace_fw_cfg_select(s, addr, "dma", s->dma_addr);
+            fw_cfg_dma_transfer(s);
+        }
+    }
     if (size == 4) {
         if (addr == 0) {
             /* FWCfgDmaAccess high address */
@@ -483,6 +504,7 @@ static bool fw_cfg_dma_mem_valid(void *opaque, hwaddr addr,
                                  MemTxAttrs attrs)
 {
     return !is_write || ((size == 4 && (addr == 0 || addr == 4)) ||
+                        (size == 2 && (addr % 2 == 0 || addr < 8 ))||
                          (size == 8 && addr == 0));
 }
 

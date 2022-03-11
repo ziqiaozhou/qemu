@@ -3394,6 +3394,9 @@ void qemu_init(int argc, char **argv, char **envp)
                 qdict_put_str(machine_opts_dict, "usb", "on");
                 add_device_config(DEV_USB, optarg);
                 break;
+            case QEMU_OPTION_mmio_fwcfg:
+                qdict_put_str(machine_opts_dict, "use-mmio-fwcfg", "on");
+                break;
             case QEMU_OPTION_device:
                 if (optarg[0] == '{') {
                     QObject *obj = qobject_from_json(optarg, &error_fatal);

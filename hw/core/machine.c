@@ -424,6 +424,20 @@ static void machine_set_graphics(Object *obj, bool value, Error **errp)
     ms->enable_graphics = value;
 }
 
+static bool machine_get_mmio_fwcfg(Object *obj, Error **errp)
+{
+    MachineState *ms = MACHINE(obj);
+
+    return ms->use_mmio_fwcfg;
+}
+
+static void machine_set_mmio_fwcfg(Object *obj, bool value, Error **errp)
+{
+    MachineState *ms = MACHINE(obj);
+
+    ms->use_mmio_fwcfg = value;
+}
+
 static char *machine_get_firmware(Object *obj, Error **errp)
 {
     MachineState *ms = MACHINE(obj);
@@ -844,6 +858,11 @@ static void machine_class_init(ObjectClass *oc, void *data)
     object_class_property_set_description(oc, "graphics",
         "Set on/off to enable/disable graphics emulation");
 
+    object_class_property_add_bool(oc, "use-mmio-fwcfg",
+        machine_get_mmio_fwcfg, machine_set_mmio_fwcfg);
+    object_class_property_set_description(oc, "use-mmio-fwcfg",
+        "Set on/off to use MMIO-based fw_cfg or port IO based");
+
     object_class_property_add_str(oc, "firmware",
         machine_get_firmware, machine_set_firmware);
     object_class_property_set_description(oc, "firmware",
@@ -902,6 +921,7 @@ static void machine_initfn(Object *obj)
     ms->dump_guest_core = true;
     ms->mem_merge = true;
     ms->enable_graphics = true;
+    ms->use_mmio_fwcfg = false;
     ms->kernel_cmdline = g_strdup("");
 
     if (mc->nvdimm_supported) {
